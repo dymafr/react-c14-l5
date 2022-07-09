@@ -10,8 +10,10 @@ function App() {
     defaultValues: {
       name: '',
       age: null,
-      happy: false,
-      sign: '',
+      other: {
+        happy: false,
+        sign: '',
+      },
       gender: null,
       password: '',
       confim: '',
@@ -53,7 +55,7 @@ function App() {
         <div className="d-flex flex-column mb-20">
           <label htmlFor="happy" className="mb-5">
             Content ?
-            <input id="happy" type="checkbox" {...register('happy')} />
+            <input id="happy" type="checkbox" {...register('other.happy')} />
           </label>
           {errors?.happy && (
             <p style={{ color: 'red' }}>{errors.happy.message}</p>
@@ -63,7 +65,7 @@ function App() {
           <label htmlFor="sign" className="mb-5">
             Signe astro
           </label>
-          <select {...register('sign')} id="sign">
+          <select {...register('other.sign')} id="sign">
             <option disabled value="">
               Choisissez un signe
             </option>
