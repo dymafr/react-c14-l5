@@ -1,39 +1,7 @@
 import React from 'react';
-import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 
 function App() {
-  const schema = yup.object({
-    name: yup
-      .string()
-      .required('Le champ est obligatoire')
-      .min(2, 'Trop court')
-      .max(5, 'Trop long')
-      .test('isYes', "Vous n'avez pas de chance", async () => {
-        const response = await fetch('https://yesno.wtf/api');
-        const result = await response.json();
-        console.log(result);
-        return result.answer === 'yes';
-      }),
-    age: yup
-      .number()
-      .typeError('Veuillez entre un nombre')
-      .min(18, 'Trop jeune'),
-    password: yup
-      .string()
-      .required('Le mot de passe est obligatoire')
-      .min(5, 'Mot de passe trop court')
-      .max(10, 'Mot de passe trop long'),
-    confirmPassword: yup
-      .string()
-      .required('Vous devez confirmer votre mot de passe')
-      .oneOf(
-        [yup.ref('password'), ''],
-        'Les mots de passe ne correspondent pas'
-      ),
-  });
-
   const {
     register,
     handleSubmit,
@@ -41,8 +9,13 @@ function App() {
   } = useForm({
     defaultValues: {
       name: '',
+      age: null,
+      happy: false,
+      sign: '',
+      gender: null,
+      password: '',
+      confim: '',
     },
-    resolver: yupResolver(schema),
   });
 
   function submit(values) {
@@ -76,6 +49,60 @@ function App() {
             })}
           />
           {errors?.age && <p style={{ color: 'red' }}>{errors.age.message}</p>}
+        </div>
+        <div className="d-flex flex-column mb-20">
+          <label htmlFor="happy" className="mb-5">
+            Content ?
+            <input id="happy" type="checkbox" {...register('happy')} />
+          </label>
+          {errors?.happy && (
+            <p style={{ color: 'red' }}>{errors.happy.message}</p>
+          )}
+        </div>
+        <div className="d-flex flex-column mb-20">
+          <label htmlFor="sign" className="mb-5">
+            Signe astro
+          </label>
+          <select {...register('sign')} id="sign">
+            <option disabled value="">
+              Choisissez un signe
+            </option>
+            <option value="fish">Poisson</option>
+            <option value="aquarius">Verseau</option>
+          </select>
+          {errors?.sign && (
+            <p style={{ color: 'red' }}>{errors.sign.message}</p>
+          )}
+        </div>
+        <div className="d-flex flex-column mb-20">
+          <label htmlFor="gender" className="mb-5">
+            Genre
+          </label>
+          <div>
+            <label htmlFor="male" className="mb-5">
+              Homme
+            </label>
+            <input
+              {...register('gender')}
+              type="radio"
+              value="male"
+              id="male"
+            />
+          </div>
+          <div>
+            <label htmlFor="female" className="mb-5">
+              Femme
+            </label>
+            <input
+              {...register('gender')}
+              type="radio"
+              value="female"
+              id="female"
+            />
+          </div>
+          {errors?.gender && (
+            <p style={{ color: 'red' }}>{errors.gender.message}</p>
+          )}
         </div>
         <div className="d-flex flex-column mb-20">
           <label htmlFor="password" className="mb-5">
